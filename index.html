@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galería - Cepas de Junín</title>
+<title>Galería de Desarrollos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -197,48 +197,6 @@
     transition:background .3s ease, color .3s ease;
   }
   .enter-btn:hover{background:var(--blanco);color:var(--negro);}
-  /* Selector rápido de secciones */
-.project-shortcuts {
-  position: fixed;
-  top: 22px;
-  right: 4vw;
-  display: flex;
-  gap: 8px;
-  z-index: 60;
-}
-.shortcut-btn {
-  background: rgba(247, 245, 241, 0.08);
-  border: 1px solid var(--linea);
-  color: var(--blanco);
-  padding: 6px 14px;
-  border-radius: 100px;
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  backdrop-filter: blur(8px);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.shortcut-btn:hover,
-.shortcut-btn.active {
-  background: var(--blanco);
-  color: var(--negro);
-  border-color: var(--blanco);
-}
-
-/* Ajuste del contador para convivir con los botones */
-.topbar {
-  max-width: 50vw; /* evita solapamiento en pantallas medianas */
-}
-
-@media (max-width: 720px) {
-  .project-shortcuts {
-    top: auto;
-    bottom: 24px;
-    right: auto;
-    left: 6vw;
-  }
-}
 
   /* ---------- END SLIDE (contacto) ---------- */
   .slide.end-slide{
@@ -286,7 +244,7 @@
   <span id="projectName">Cepas de Junín</span>
   <span class="counter" id="counter">01 / 11</span>
 </div>
-<nav class="project-shortcuts" id="shortcuts" aria-label="Accesos directos a secciones"></nav>
+
 <div class="progress" id="progress"></div>
 
 <div class="stage" id="stage">
@@ -304,9 +262,7 @@
 <script>
 const proyectos = [
   {
-    id: "loteo",
     nombre: "Cepas de Junín",
-    labelNav: "Loteo",
     ubicacion: "Carril del centro entre Santos Lugares y Olivares, Junín",
     fotos: [
       { src: "imagenes/cepasdejunin/IMG_6639.JPG", detalle: "Entrada" },
@@ -316,35 +272,31 @@ const proyectos = [
     ]
   },
   {
-    id: "duplex",
-    nombre: "Cepas de Junín - Dúplex",
-    labelNav: "Dúplex",
+    nombre: "Cepas de Junín - Dupléx",
     ubicacion: "Carril del centro entre Santos Lugares y Olivares, Junín",
     fotos: [
       { src: "imagenes/duplex-cepas/IMG-20260813-WA0097.jpg", detalle: "Vista exterior frontal" },
-      { src: "imagenes/duplex-cepas/IMG-20260813-WA0078 (1).jpg", detalle: "Interior planta baja" },
-      { src: "imagenes/duplex-cepas/IMG-20260813-WA0083.jpg", detalle: "Entrada trasera" },
-      { src: "imagenes/duplex-cepas/IMG-20260813-WA6682.jpg", detalle: "Vista exterior posterior" },
+      { src: "imagenes/duplex-cepas/IMG-20260813-WA0078 (1).jpg", detalle: "Interior planta baja - dúplex" },
+      { src: "imagenes/duplex-cepas/IMG-20260813-WA0083.jpg", detalle: "Vista desde entrada trasera - dúplex" },
+      { src: "imagenes/duplex-cepas/IMG-20260813-WA6682.jpg", detalle: "Vista exterior por detrás" },
     ]
   },
   {
-    id: "casa",
     nombre: "Cepas de Junín - Casa",
-    labelNav: "Casa",
     ubicacion: "Carril del centro entre Santos Lugares y Olivares, Junín",
     fotos: [
       { src: "imagenes/casa-cepas/IMG_6662.JPG", detalle: "Fachada exterior" },
       { src: "imagenes/casa-cepas/IMG_6675.JPG", detalle: "Vista diagonal" },
-      // Convertir IMG_6670.CR2 a .JPG / .webp para que cargue en el navegador
-      { src: "imagenes/casa-cepas/IMG_6670.jpg", detalle: "Vista interior" },
+      { src: "imagenes/casa-cepas/IMG_6670.CR2", detalle: "Vista interior" },
     ]
   }
 ];
 
+// aplanar en una sola secuencia, guardando a qué proyecto pertenece cada foto
 const slidesData = [];
 proyectos.forEach((p, pi) => {
   p.fotos.forEach((f, fi) => {
-    slidesData.push({ ...f, id: p.id, proyecto: p.nombre, ubicacion: p.ubicacion, projIndex: pi });
+    slidesData.push({ ...f, proyecto: p.nombre, ubicacion: p.ubicacion, projIndex: pi, isFirstOfProject: fi === 0 });
   });
 });
 
@@ -353,9 +305,8 @@ const progressEl = document.getElementById('progress');
 const filmstripEl = document.getElementById('filmstrip');
 const projectNameEl = document.getElementById('projectName');
 const counterEl = document.getElementById('counter');
-const shortcutsEl = document.getElementById('shortcuts');
 
-// Renderizar slides
+// crear slides de fotos
 slidesData.forEach((s, i) => {
   const div = document.createElement('div');
   div.className = 'slide';
@@ -364,13 +315,13 @@ slidesData.forEach((s, i) => {
     <img src="${s.src}" alt="${s.proyecto} - ${s.detalle}">
     <div class="slide-caption">
       <div class="proyecto">${s.proyecto}</div>
-      <div class="detalle">${s.detalle ? s.detalle + ' — ' : ''}${s.ubicacion}</div>
+      <div class="detalle">${s.detalle} — ${s.ubicacion}</div>
     </div>
   `;
   stage.insertBefore(div, document.getElementById('prevBtn'));
 });
 
-// Slide final
+// slide final de contacto
 const endDiv = document.createElement('div');
 endDiv.className = 'slide end-slide';
 endDiv.dataset.index = slidesData.length;
@@ -384,32 +335,19 @@ stage.insertBefore(endDiv, document.getElementById('prevBtn'));
 
 const totalSlides = slidesData.length + 1;
 
-// Generar accesos rápidos (links/píldoras superiores)
-proyectos.forEach((p) => {
-  const btn = document.createElement('button');
-  btn.className = 'shortcut-btn';
-  btn.textContent = p.labelNav;
-  btn.dataset.id = p.id;
-  btn.addEventListener('click', () => {
-    const target = slidesData.findIndex(s => s.id === p.id);
-    document.getElementById('intro').classList.add('hidden');
-    goTo(target);
-  });
-  shortcutsEl.appendChild(btn);
-});
-
-// Puntos de progreso
+// puntos de progreso, uno por proyecto
 proyectos.forEach((p, pi) => {
   const dot = document.createElement('button');
   dot.title = p.nombre;
   dot.addEventListener('click', () => {
-    goTo(slidesData.findIndex(s => s.projIndex === pi));
+    const targetIndex = slidesData.findIndex(s => s.projIndex === pi);
+    goTo(targetIndex);
   });
   progressEl.appendChild(dot);
 });
 
-// Filmstrip
-slidesData.forEach(() => {
+// filmstrip: un segmento por foto (no por slide de cierre)
+slidesData.forEach((s, i) => {
   const seg = document.createElement('div');
   seg.className = 'seg';
   seg.innerHTML = '<div class="fill"></div>';
@@ -420,7 +358,6 @@ let current = 0;
 const allSlides = document.querySelectorAll('.slide');
 const dots = document.querySelectorAll('.progress button');
 const segs = document.querySelectorAll('.filmstrip .seg');
-const shortcutBtns = document.querySelectorAll('.shortcut-btn');
 
 function render(){
   allSlides.forEach((s, i) => s.classList.toggle('active', i === current));
@@ -428,43 +365,38 @@ function render(){
   if(current < slidesData.length){
     const s = slidesData[current];
     projectNameEl.textContent = s.proyecto;
-    counterEl.textContent = `${String(current + 1).padStart(2, '0')} / ${String(slidesData.length).padStart(2, '0')}`;
-    dots.forEach((d, i) => d.classList.toggle('active', i === s.projIndex));
-    shortcutBtns.forEach((b, i) => b.classList.toggle('active', i === s.projIndex));
-    history.replaceState(null, '', '#' + s.id);
+    counterEl.textContent = String(current+1).padStart(2,'0') + ' / ' + String(slidesData.length).padStart(2,'0');
+    dots.forEach((d,i) => d.classList.toggle('active', i === s.projIndex));
   } else {
     projectNameEl.textContent = 'Contacto';
     counterEl.textContent = '';
     dots.forEach(d => d.classList.remove('active'));
-    shortcutBtns.forEach(b => b.classList.remove('active'));
-    history.replaceState(null, '', '#contacto');
   }
 
-  segs.forEach((seg, i) => seg.classList.toggle('done', i <= current && current < slidesData.length));
+  segs.forEach((seg,i) => seg.classList.toggle('done', i <= current && current < slidesData.length ? i <= current : i < slidesData.length));
 }
 
 function goTo(i){
-  current = Math.max(0, Math.min(totalSlides - 1, i));
+  current = Math.max(0, Math.min(totalSlides-1, i));
   render();
 }
 
-// Navegación
-document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
-document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+document.getElementById('nextBtn').addEventListener('click', () => goTo(current+1));
+document.getElementById('prevBtn').addEventListener('click', () => goTo(current-1));
 
 document.addEventListener('keydown', (e) => {
-  if(e.key === 'ArrowRight') goTo(current + 1);
-  if(e.key === 'ArrowLeft') goTo(current - 1);
+  if(e.key === 'ArrowRight') goTo(current+1);
+  if(e.key === 'ArrowLeft') goTo(current-1);
 });
 
-// Soporte touch
+// swipe táctil
 let touchX = null;
 stage.addEventListener('touchstart', (e) => touchX = e.touches[0].clientX);
 stage.addEventListener('touchend', (e) => {
   if(touchX === null) return;
   const dx = e.changedTouches[0].clientX - touchX;
-  if(dx > 50) goTo(current - 1);
-  if(dx < -50) goTo(current + 1);
+  if(dx > 50) goTo(current-1);
+  if(dx < -50) goTo(current+1);
   touchX = null;
 });
 
@@ -472,17 +404,8 @@ document.getElementById('enterBtn').addEventListener('click', () => {
   document.getElementById('intro').classList.add('hidden');
 });
 
-// Detección inicial de URL directa (ej: tudominio.com/#duplex o #casa)
-const hash = window.location.hash.replace('#', '');
-if(hash){
-  const matchIndex = slidesData.findIndex(s => s.id === hash);
-  if(matchIndex !== -1){
-    document.getElementById('intro').classList.add('hidden');
-    current = matchIndex;
-  }
-}
-
 render();
+</script>
 
 </body>
 </html>
