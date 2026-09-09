@@ -22,7 +22,7 @@
     overflow:hidden;
   }
 
-  /* ---------- TOP BAR (mínima) ---------- */
+  /* ---------- TOP BAR ---------- */
   .topbar{
     position:fixed;top:0;left:0;right:0;
     display:flex;justify-content:space-between;align-items:center;
@@ -31,10 +31,19 @@
     font-size:0.78rem;
     letter-spacing:0.02em;
     color:var(--blanco);
-    pointer-events:none;
   }
   .topbar span{opacity:0.8;}
   .topbar .counter{font-variant-numeric:tabular-nums;}
+  .home-btn{
+    background:none;
+    border:none;
+    color:inherit;
+    font-size:inherit;
+    cursor:pointer;
+    opacity:0.8;
+    transition:opacity .2s;
+  }
+  .home-btn:hover{opacity:1;text-decoration:underline;}
 
   /* ---------- MAIN STAGE ---------- */
   .stage{
@@ -72,7 +81,6 @@
     pointer-events:none;
   }
 
-  /* caption, chico y abajo a la izquierda */
   .slide-caption{
     position:absolute;
     left:4vw;bottom:6vh;
@@ -114,7 +122,7 @@
   .nav-arrow.prev:hover svg{transform:translateX(-4px);}
   .nav-arrow.next:hover svg{transform:translateX(4px);}
 
-  /* ---------- PROGRESS DOTS BY PROJECT ---------- */
+  /* ---------- PROGRESS DOTS ---------- */
   .progress{
     position:fixed;
     left:4vw;top:50%;
@@ -136,7 +144,7 @@
     transform:scale(1.6);
   }
 
-  /* ---------- FILMSTRIP (abajo, minimal) ---------- */
+  /* ---------- FILMSTRIP ---------- */
   .filmstrip{
     position:fixed;
     bottom:0;left:0;right:0;
@@ -159,7 +167,7 @@
   }
   .filmstrip .seg.done .fill{width:100%;}
 
-  /* ---------- INTRO OVERLAY ---------- */
+  /* ---------- INTRO & PROJECT GRID ---------- */
   .intro-overlay{
     position:fixed;inset:0;
     background:var(--negro);
@@ -168,37 +176,72 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:28px;
+    padding:6vw;
+    gap:40px;
     text-align:center;
-    transition:opacity .9s ease, visibility .9s ease;
+    transition:opacity .6s ease, visibility .6s ease;
   }
   .intro-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-  .intro-overlay h1{
+  .intro-header h1{
     font-family:'Fraunces',serif;
     font-weight:300;
-    font-size:clamp(1.8rem,4vw,3rem);
-    max-width:16ch;
+    font-size:clamp(1.8rem,3.5vw,2.8rem);
     line-height:1.15;
+    margin-bottom:10px;
   }
-  .intro-overlay p{
-    font-size:0.82rem;
-    color:var(--arena);
-    max-width:40ch;
-  }
-  .enter-btn{
-    margin-top:10px;
-    border:1px solid var(--linea);
-    color:var(--blanco);
-    background:transparent;
-    padding:14px 30px;
-    border-radius:100px;
+  .intro-header p{
     font-size:0.85rem;
-    cursor:pointer;
-    transition:background .3s ease, color .3s ease;
+    color:var(--arena);
   }
-  .enter-btn:hover{background:var(--blanco);color:var(--negro);}
 
-  /* ---------- END SLIDE (contacto) ---------- */
+  .projects-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+    width:100%;
+    max-width:980px;
+  }
+  .grid-card{
+    background:rgba(247,245,241,0.03);
+    border:1px solid var(--linea);
+    border-radius:12px;
+    padding:32px 24px;
+    text-align:left;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-height:180px;
+    transition:background .3s ease, border-color .3s ease, transform .3s ease;
+  }
+  .grid-card:hover{
+    background:rgba(247,245,241,0.08);
+    border-color:var(--blanco);
+    transform:translateY(-4px);
+  }
+  .grid-card h3{
+    font-family:'Fraunces',serif;
+    font-weight:400;
+    font-size:1.35rem;
+    color:var(--blanco);
+    margin-bottom:8px;
+  }
+  .grid-card span{
+    font-size:0.75rem;
+    color:var(--arena);
+    line-height:1.4;
+  }
+  .grid-card .action-label{
+    margin-top:auto;
+    padding-top:20px;
+    font-size:0.72rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--blanco);
+    opacity:0.7;
+  }
+
+  /* ---------- END SLIDE ---------- */
   .slide.end-slide{
     background:var(--negro);
     display:flex;
@@ -224,7 +267,9 @@
     font-size:0.85rem;
   }
 
-  @media (max-width:720px){
+  @media (max-width:840px){
+    .projects-grid{grid-template-columns:1fr;max-width:400px;}
+    .grid-card{min-height:130px;padding:20px;}
     .slide-caption{left:6vw;bottom:9vh;}
     .progress{left:6vw;}
     .filmstrip{padding:0 6vw;}
@@ -235,12 +280,37 @@
 <body>
 
 <div class="intro-overlay" id="intro">
-  <h1>Recorré nuestros desarrollos</h1>
-  <p>Una galería para caminar cada proyecto como si estuvieras ahí. Usá las flechas o tocá los costados para avanzar.</p>
-  <button class="enter-btn" id="enterBtn">Entrar a la galería</button>
+  <div class="intro-header">
+    <h1>Nuestros Desarrollos</h1>
+    <p>Seleccioná el proyecto que querés recorrer:</p>
+  </div>
+  <div class="projects-grid">
+    <div class="grid-card" data-project-key="cepas">
+      <div>
+        <h3>Cepas de Junín</h3>
+        <span>Lotes, Dúplex y Casas terminadas</span>
+      </div>
+      <div class="action-label">Ver galería →</div>
+    </div>
+    <div class="grid-card" data-project-key="alamos">
+      <div>
+        <h3>Álamos</h3>
+        <span>Barrio privado y lotes residenciales</span>
+      </div>
+      <div class="action-label">Ver galería →</div>
+    </div>
+    <div class="grid-card" data-project-key="ancellotta">
+      <div>
+        <h3>Ancellotta</h3>
+        <span>Desarrollo residencial premium</span>
+      </div>
+      <div class="action-label">Ver galería →</div>
+    </div>
+  </div>
 </div>
 
 <div class="topbar">
+  <button class="home-btn" id="homeBtn">← Proyectos</button>
   <span id="projectName">Cepas de Junín</span>
   <span class="counter" id="counter">01 / 11</span>
 </div>
@@ -248,7 +318,6 @@
 <div class="progress" id="progress"></div>
 
 <div class="stage" id="stage">
-  <!-- Slides insertados por JS -->
   <button class="nav-arrow prev" id="prevBtn" aria-label="Anterior">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
   </button>
@@ -262,6 +331,7 @@
 <script>
 const proyectos = [
   {
+    key: "cepas",
     nombre: "Cepas de Junín",
     ubicacion: "Carril del centro entre Santos Lugares y Olivares, Junín",
     fotos: [
@@ -269,34 +339,36 @@ const proyectos = [
       { src: "imagenes/cepasdejunin/IMG_6629.JPG", detalle: "Garita - Entrada" },
       { src: "imagenes/cepasdejunin/IMG_6707.JPG", detalle: "" },
       { src: "imagenes/cepasdejunin/IMG_6708.JPG", detalle: "" },
-    ]
-  },
-  {
-    nombre: "Cepas de Junín - Dupléx",
-    ubicacion: "Carril del centro entre Santos Lugares y Olivares, Junín",
-    fotos: [
-      { src: "imagenes/duplex-cepas/IMG-20260813-WA0097.jpg", detalle: "Vista exterior frontal" },
+      { src: "imagenes/duplex-cepas/IMG-20260813-WA0097.jpg", detalle: "Vista exterior frontal dúplex" },
       { src: "imagenes/duplex-cepas/IMG-20260813-WA0078 (1).jpg", detalle: "Interior planta baja - dúplex" },
-      { src: "imagenes/duplex-cepas/IMG-20260813-WA0083.jpg", detalle: "Vista desde entrada trasera - dúplex" },
-      { src: "imagenes/duplex-cepas/IMG_6682.jpg", detalle: "Vista exterior por detrás" },
+      { src: "imagenes/casa-cepas/IMG_6662.JPG", detalle: "Fachada exterior casa" },
+      { src: "imagenes/casa-cepas/IMG_6675.jpg", detalle: "Vista diagonal" }
     ]
   },
   {
-    nombre: "Cepas de Junín - Casa",
-    ubicacion: "Carril del centro entre Santos Lugares y Olivares, Junín",
+    key: "alamos",
+    nombre: "Álamos",
+    ubicacion: "Junín, Mendoza",
     fotos: [
-      { src: "imagenes/casa-cepas/IMG_6662.JPG", detalle: "Fachada exterior" },
-      { src: "imagenes/casa-cepas/IMG_6675.jpg", detalle: "Vista diagonal" },
-      { src: "imagenes/casa-cepas/IMG_6673.jpg", detalle: "Vista interior" },
+      { src: "imagenes/alamos/foto1.jpg", detalle: "Portal de acceso" },
+      { src: "imagenes/alamos/foto2.jpg", detalle: "Vista general de lotes" }
+    ]
+  },
+  {
+    key: "ancellotta",
+    nombre: "Ancellotta",
+    ubicacion: "Junín, Mendoza",
+    fotos: [
+      { src: "imagenes/ancellotta/foto1.jpg", detalle: "Acceso principal" },
+      { src: "imagenes/ancellotta/foto2.jpg", detalle: "Entorno natural" }
     ]
   }
 ];
 
-// aplanar en una sola secuencia, guardando a qué proyecto pertenece cada foto
 const slidesData = [];
 proyectos.forEach((p, pi) => {
   p.fotos.forEach((f, fi) => {
-    slidesData.push({ ...f, proyecto: p.nombre, ubicacion: p.ubicacion, projIndex: pi, isFirstOfProject: fi === 0 });
+    slidesData.push({ ...f, proyecto: p.nombre, projKey: p.key, ubicacion: p.ubicacion, projIndex: pi, isFirstOfProject: fi === 0 });
   });
 });
 
@@ -305,8 +377,8 @@ const progressEl = document.getElementById('progress');
 const filmstripEl = document.getElementById('filmstrip');
 const projectNameEl = document.getElementById('projectName');
 const counterEl = document.getElementById('counter');
+const introEl = document.getElementById('intro');
 
-// crear slides de fotos
 slidesData.forEach((s, i) => {
   const div = document.createElement('div');
   div.className = 'slide';
@@ -315,13 +387,12 @@ slidesData.forEach((s, i) => {
     <img src="${s.src}" alt="${s.proyecto} - ${s.detalle}">
     <div class="slide-caption">
       <div class="proyecto">${s.proyecto}</div>
-      <div class="detalle">${s.detalle} — ${s.ubicacion}</div>
+      <div class="detalle">${s.detalle ? s.detalle + ' — ' : ''}${s.ubicacion}</div>
     </div>
   `;
   stage.insertBefore(div, document.getElementById('prevBtn'));
 });
 
-// slide final de contacto
 const endDiv = document.createElement('div');
 endDiv.className = 'slide end-slide';
 endDiv.dataset.index = slidesData.length;
@@ -335,19 +406,17 @@ stage.insertBefore(endDiv, document.getElementById('prevBtn'));
 
 const totalSlides = slidesData.length + 1;
 
-// puntos de progreso, uno por proyecto
 proyectos.forEach((p, pi) => {
   const dot = document.createElement('button');
   dot.title = p.nombre;
   dot.addEventListener('click', () => {
     const targetIndex = slidesData.findIndex(s => s.projIndex === pi);
-    goTo(targetIndex);
+    if (targetIndex !== -1) goTo(targetIndex);
   });
   progressEl.appendChild(dot);
 });
 
-// filmstrip: un segmento por foto (no por slide de cierre)
-slidesData.forEach((s, i) => {
+slidesData.forEach(() => {
   const seg = document.createElement('div');
   seg.className = 'seg';
   seg.innerHTML = '<div class="fill"></div>';
@@ -381,6 +450,23 @@ function goTo(i){
   render();
 }
 
+// Navegación por grilla inicial
+document.querySelectorAll('.grid-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const key = card.dataset.projectKey;
+    const targetIndex = slidesData.findIndex(s => s.projKey === key);
+    if(targetIndex !== -1) {
+      goTo(targetIndex);
+    }
+    introEl.classList.add('hidden');
+  });
+});
+
+// Botón para reabrir la grilla desde la barra superior
+document.getElementById('homeBtn').addEventListener('click', () => {
+  introEl.classList.remove('hidden');
+});
+
 document.getElementById('nextBtn').addEventListener('click', () => goTo(current+1));
 document.getElementById('prevBtn').addEventListener('click', () => goTo(current-1));
 
@@ -389,7 +475,6 @@ document.addEventListener('keydown', (e) => {
   if(e.key === 'ArrowLeft') goTo(current-1);
 });
 
-// swipe táctil
 let touchX = null;
 stage.addEventListener('touchstart', (e) => touchX = e.touches[0].clientX);
 stage.addEventListener('touchend', (e) => {
@@ -400,12 +485,7 @@ stage.addEventListener('touchend', (e) => {
   touchX = null;
 });
 
-document.getElementById('enterBtn').addEventListener('click', () => {
-  document.getElementById('intro').classList.add('hidden');
-});
-
 render();
 </script>
-
 </body>
 </html>
